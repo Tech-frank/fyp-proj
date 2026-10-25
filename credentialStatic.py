@@ -19,9 +19,9 @@ def flag_credential_exposure(parsed_ast):
                 if isinstance(target, ast.Name):
                     err_var = ["password", "passwd", "pwd", "secret", "token", "api_key", "access_key", "private_key", "apikey", "auth_key", "signing_key", "encryption_key"]
                     variable_name = target.id.lower()
-                    if any(err in variable_name for err in err_var):
+                    if variable_name in err_var:
                         if isinstance(node.value, ast.Constant):
-                            if type(node.value.value) in [str, int] and not isinstance(node.value.value, bool):
+                            if type(node.value.value) in [str]:
                                 flagged_nodes.append(f" {variable_name} = [REDACTED] at line {node.lineno}")
                             
                         # else:

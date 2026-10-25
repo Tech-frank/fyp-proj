@@ -1,4 +1,4 @@
-from fileParser import parse_file_to_ast
+from src.parser import parse_file_to_ast
 
 file = input("Enter the path to the Python file: ")
 try:
