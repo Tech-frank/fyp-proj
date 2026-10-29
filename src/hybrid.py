@@ -1,112 +1,136 @@
-import unittest
+"""Part 9: combine the rule engine and the classifiers into one label.
+
+    combine(static_positive, ml_positive) -> "Critical" | "High" | "Medium" | "No finding"
+
+                    ML flags it    ML doesn't
+    rule hit        Critical       High
+    no rule hit     Medium         No finding
+
+Critical is the "agreement" configuration and any of the three labels is the
+"union" configuration (chapter 3.7.4). cli.py applies this per analysis unit;
+evaluate.py applies it per sample using out-of-fold ML predictions.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Iterable, Mapping
 
 from findings import Finding
-from hybrid import (
-    OOFPrediction,
-    build_evaluation_rows,
-    combine,
-    decide_unit,
-)
+
+LABELS = ("Critical", "High", "Medium", "No finding")
+VULN_CLASSES = ("HCC", "SQLI")
 
 
-def example_finding(file="sample.py", line=1):
-    return Finding(
-        vuln_class="HCC",
-        rule_id="HCC001",
-        file=file,
-        unit="<module>",
-        line=line,
-        snippet='password = "example-secret"',
-        message="Hardcoded credential.",
-        remediation="Load the credential from an environment variable.",
-        secrets=("example-secret",),
-    )
+def combine(static_positive: bool, ml_positive: bool) -> str:
+    """The hybrid decision table."""
+    if static_positive and ml_positive:
+        return "Critical"
+    if static_positive:
+        return "High"
+    if ml_positive:
+        return "Medium"
+    return "No finding"
 
 
-class HybridTests(unittest.TestCase):
-    def test_both_positive(self):
-        self.assertEqual(combine(True, True), "Critical")
-
-    def test_static_only(self):
-        self.assertEqual(combine(True, False), "High")
-
-    def test_ml_only(self):
-        self.assertEqual(combine(False, True), "Medium")
-
-    def test_both_negative(self):
-        self.assertEqual(combine(False, False), "No finding")
-
-    def test_preserves_multiple_static_findings(self):
-        findings = [
-            example_finding(line=1),
-            example_finding(line=5),
-        ]
-
-        decisions = decide_unit(
-            file="sample.py",
-            unit="<module>",
-            static_findings=findings,
-            ml_scores={"HCC": 0.8, "SQLI": 0.1},
-            threshold=0.5,
-        )
-
-        hcc = decisions[0]
-        self.assertEqual(hcc.label, "Critical")
-        self.assertEqual(
-            [item.finding for item in hcc.findings],
-            findings,
-        )
-        self.assertTrue(
-            all(item.label == "Critical" for item in hcc.findings)
-        )
-
-    def test_ml_only_has_unit_decision_without_rule_findings(self):
-        decisions = decide_unit(
-            file="sample.py",
-            unit="<module>",
-            static_findings=[],
-            ml_scores={"HCC": 0.9, "SQLI": 0.1},
-            threshold=0.5,
-        )
-
-        self.assertEqual(decisions[0].label, "Medium")
-        self.assertEqual(decisions[0].findings, ())
-
-    def test_evaluation_consistency_for_all_four_cases(self):
-        rows = build_evaluation_rows(
-            static_findings=[
-                example_finding(file="both.py"),
-                example_finding(file="static_only.py"),
-            ],
-            oof_predictions=[
-                OOFPrediction("both.py", "HCC", 0.9, fold=0),
-                OOFPrediction("static_only.py", "HCC", 0.1, fold=1),
-                OOFPrediction("ml_only.py", "HCC", 0.9, fold=2),
-                OOFPrediction("neither.py", "HCC", 0.1, fold=3),
-            ],
-            threshold=0.5,
-        )
-
-        self.assertEqual(
-            [row.label for row in rows],
-            ["Critical", "High", "Medium", "No finding"],
-        )
-
-        for row in rows:
-            self.assertEqual(row.union, row.static or row.ml)
-            self.assertEqual(row.agreement, row.static and row.ml)
-
-    def test_threshold_is_inclusive(self):
-        decisions = decide_unit(
-            file="sample.py",
-            unit="<module>",
-            static_findings=[],
-            ml_scores={"HCC": 0.5, "SQLI": 0.1},
-            threshold=0.5,
-        )
-
-        self.assertTrue(decisions[0].ml_positive)
+@dataclass(frozen=True)
+class LabelledFinding:
+    """One rule finding carrying the label of the unit decision it belongs to."""
+    finding: Finding
+    label: str
 
 
-if __name__ == "__main__":
-    unittest.main()
+@dataclass(frozen=True)
+class UnitDecision:
+    """The hybrid result for one (file, unit, vulnerability class)."""
+    file: str
+    unit: str
+    vuln_class: str
+    static_positive: bool
+    ml_positive: bool
+    ml_score: float
+    label: str
+    findings: tuple[LabelledFinding, ...]
+
+
+def decide_unit(
+    *,
+    file: str,
+    unit: str,
+    static_findings: Iterable[Finding],
+    ml_scores: Mapping[str, float],
+    threshold: float,
+) -> list[UnitDecision]:
+    """One decision per vulnerability class (HCC, then SQLI) for a unit.
+
+    `static_findings` are the rule findings already assigned to this unit.
+    The threshold is inclusive: a score equal to it counts as positive.
+    Every rule finding is kept, so three hits give three labelled findings.
+    An ML-only decision has no findings: there is no line-level evidence.
+    """
+    static_findings = list(static_findings)
+    decisions = []
+    for vuln_class in VULN_CLASSES:
+        hits = [f for f in static_findings if f.vuln_class == vuln_class]
+        score = float(ml_scores.get(vuln_class, 0.0))
+        ml_positive = score >= threshold
+        label = combine(bool(hits), ml_positive)
+        decisions.append(UnitDecision(
+            file=file,
+            unit=unit,
+            vuln_class=vuln_class,
+            static_positive=bool(hits),
+            ml_positive=ml_positive,
+            ml_score=score,
+            label=label,
+            findings=tuple(LabelledFinding(f, label) for f in hits),
+        ))
+    return decisions
+
+
+@dataclass(frozen=True)
+class OOFPrediction:
+    """An out-of-fold ML prediction for one sample file and class."""
+    file: str
+    vuln_class: str
+    score: float
+    fold: int
+
+
+@dataclass(frozen=True)
+class EvaluationRow:
+    file: str
+    vuln_class: str
+    fold: int
+    score: float
+    static: bool
+    ml: bool
+    label: str
+    agreement: bool
+    union: bool
+
+
+def build_evaluation_rows(
+    *,
+    static_findings: Iterable[Finding],
+    oof_predictions: Iterable[OOFPrediction],
+    threshold: float,
+) -> list[EvaluationRow]:
+    """One row per out-of-fold prediction, in the order given."""
+    fired = {(f.file, f.vuln_class) for f in static_findings}
+    rows = []
+    for p in oof_predictions:
+        static = (p.file, p.vuln_class) in fired
+        ml = p.score >= threshold
+        label = combine(static, ml)
+        rows.append(EvaluationRow(
+            file=p.file,
+            vuln_class=p.vuln_class,
+            fold=p.fold,
+            score=p.score,
+            static=static,
+            ml=ml,
+            label=label,
+            agreement=label == "Critical",
+            union=label != "No finding",
+        ))
+    return rows

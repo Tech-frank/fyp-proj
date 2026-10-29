@@ -57,9 +57,7 @@ def test_finding_mapped_to_smallest_enclosing_unit(tmp_path):
 
 def test_hybrid_labels_with_fake_model(tmp_path, monkeypatch):
     """Rule + ML agree -> Critical; ML only -> Medium. Uses stand-ins for Parts 7 and 9."""
-    hybrid = pytest.importorskip("hybrid")
-    if not hasattr(hybrid, "combine"):
-        pytest.skip("Part 9 (hybrid.combine) not written yet")
+    import hybrid
 
     class AlwaysYes:
         classes_ = [0, 1]
