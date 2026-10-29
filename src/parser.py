@@ -43,7 +43,7 @@ def find_python_files(
 def read_and_parse(path: Path) -> ast.Module | None:
     """Return the parsed AST, or warn and skip an unreadable/invalid file."""
     try:
-        source = path.read_text(encoding="utf-8")
+        source = path.read_text(encoding="utf-8-sig")
         return ast.parse(source, filename=str(path))
     except UnicodeDecodeError as exc:
         print(f"Warning: {path}: invalid UTF-8: {exc}")
