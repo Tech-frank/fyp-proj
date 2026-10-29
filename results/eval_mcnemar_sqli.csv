@@ -1,0 +1,5 @@
+comparison,primary,both_right,first_only_right,second_only_right,both_wrong,discordant,p_value
+hybrid_agreement vs static,yes,179,11,2,8,13,0.022461
+hybrid_agreement vs ml,yes,187,3,5,5,8,0.726562
+hybrid_union vs static,no,178,5,3,14,8,0.726562
+hybrid_union vs ml,no,181,2,11,6,13,0.022461

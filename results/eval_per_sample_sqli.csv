@@ -1,0 +1,201 @@
+sample_id,kind,group_id,label,static,ml,ml_score,hybrid_label,hybrid_agreement,hybrid_union
+hcc_pos_01,hcc_positive,hcc_g01,0,0,0,0.0,No finding,0,0
+hcc_twin_01,hcc_safe_twin,hcc_g01,0,0,0,0.0,No finding,0,0
+hcc_pos_02,hcc_positive,hcc_g02,0,0,0,0.0,No finding,0,0
+hcc_twin_02,hcc_safe_twin,hcc_g02,0,0,0,0.0,No finding,0,0
+hcc_pos_03,hcc_positive,hcc_g03,0,0,0,0.001478,No finding,0,0
+hcc_twin_03,hcc_safe_twin,hcc_g03,0,0,0,0.002398,No finding,0,0
+hcc_pos_04,hcc_positive,hcc_g04,0,0,0,0.005408,No finding,0,0
+hcc_twin_04,hcc_safe_twin,hcc_g04,0,0,0,0.008339,No finding,0,0
+hcc_pos_05,hcc_positive,hcc_g05,0,0,0,1.1e-05,No finding,0,0
+hcc_twin_05,hcc_safe_twin,hcc_g05,0,0,0,3.2e-05,No finding,0,0
+hcc_pos_06,hcc_positive,hcc_g06,0,0,0,3.8e-05,No finding,0,0
+hcc_twin_06,hcc_safe_twin,hcc_g06,0,0,0,0.000321,No finding,0,0
+hcc_pos_07,hcc_positive,hcc_g07,0,0,0,0.000538,No finding,0,0
+hcc_twin_07,hcc_safe_twin,hcc_g07,0,0,0,0.001746,No finding,0,0
+hcc_pos_08,hcc_positive,hcc_g08,0,0,0,0.035,No finding,0,0
+hcc_twin_08,hcc_safe_twin,hcc_g08,0,0,0,0.06,No finding,0,0
+hcc_pos_09,hcc_positive,hcc_g09,0,0,0,0.001226,No finding,0,0
+hcc_twin_09,hcc_safe_twin,hcc_g09,0,0,0,0.000839,No finding,0,0
+hcc_pos_10,hcc_positive,hcc_g10,0,0,0,4e-05,No finding,0,0
+hcc_twin_10,hcc_safe_twin,hcc_g10,0,0,0,9.5e-05,No finding,0,0
+hcc_pos_11,hcc_positive,hcc_g11,0,0,0,0.00098,No finding,0,0
+hcc_twin_11,hcc_safe_twin,hcc_g11,0,0,0,0.003022,No finding,0,0
+hcc_pos_12,hcc_positive,hcc_g12,0,0,0,0.0,No finding,0,0
+hcc_twin_12,hcc_safe_twin,hcc_g12,0,0,0,0.0,No finding,0,0
+hcc_pos_13,hcc_positive,hcc_g13,0,0,0,0.001606,No finding,0,0
+hcc_twin_13,hcc_safe_twin,hcc_g13,0,0,0,0.002147,No finding,0,0
+hcc_pos_14,hcc_positive,hcc_g14,0,0,0,6e-06,No finding,0,0
+hcc_twin_14,hcc_safe_twin,hcc_g14,0,0,0,6e-06,No finding,0,0
+hcc_pos_15,hcc_positive,hcc_g15,0,0,0,3e-06,No finding,0,0
+hcc_twin_15,hcc_safe_twin,hcc_g15,0,0,0,4e-06,No finding,0,0
+hcc_pos_16,hcc_positive,hcc_g16,0,0,0,0.005,No finding,0,0
+hcc_twin_16,hcc_safe_twin,hcc_g16,0,0,0,0.005,No finding,0,0
+hcc_pos_17,hcc_positive,hcc_g17,0,0,0,0.000251,No finding,0,0
+hcc_twin_17,hcc_safe_twin,hcc_g17,0,0,0,0.000233,No finding,0,0
+hcc_pos_18,hcc_positive,hcc_g18,0,0,0,0.0,No finding,0,0
+hcc_twin_18,hcc_safe_twin,hcc_g18,0,0,0,0.0,No finding,0,0
+hcc_pos_19,hcc_positive,hcc_g19,0,0,0,0.0,No finding,0,0
+hcc_twin_19,hcc_safe_twin,hcc_g19,0,0,0,0.0,No finding,0,0
+hcc_pos_20,hcc_positive,hcc_g20,0,0,0,0.003526,No finding,0,0
+hcc_twin_20,hcc_safe_twin,hcc_g20,0,0,0,0.001299,No finding,0,0
+hcc_pos_21,hcc_positive,hcc_g21,0,0,0,0.0,No finding,0,0
+hcc_twin_21,hcc_safe_twin,hcc_g21,0,0,0,0.005,No finding,0,0
+hcc_pos_22,hcc_positive,hcc_g22,0,0,0,0.000129,No finding,0,0
+hcc_twin_22,hcc_safe_twin,hcc_g22,0,0,0,0.000419,No finding,0,0
+hcc_pos_23,hcc_positive,hcc_g23,0,0,0,0.001527,No finding,0,0
+hcc_twin_23,hcc_safe_twin,hcc_g23,0,0,0,0.000729,No finding,0,0
+hcc_pos_24,hcc_positive,hcc_g24,0,0,0,0.00054,No finding,0,0
+hcc_twin_24,hcc_safe_twin,hcc_g24,0,0,0,0.000669,No finding,0,0
+hcc_pos_25,hcc_positive,hcc_g25,0,0,0,0.00257,No finding,0,0
+hcc_twin_25,hcc_safe_twin,hcc_g25,0,0,0,0.00226,No finding,0,0
+hcc_pos_26,hcc_positive,hcc_g26,0,0,0,0.0,No finding,0,0
+hcc_twin_26,hcc_safe_twin,hcc_g26,0,0,0,0.0,No finding,0,0
+hcc_pos_27,hcc_positive,hcc_g27,0,0,0,0.0,No finding,0,0
+hcc_twin_27,hcc_safe_twin,hcc_g27,0,0,0,1e-06,No finding,0,0
+hcc_pos_28,hcc_positive,hcc_g28,0,0,0,1e-06,No finding,0,0
+hcc_twin_28,hcc_safe_twin,hcc_g28,0,0,0,1e-06,No finding,0,0
+hcc_pos_29,hcc_positive,hcc_g29,0,0,0,0.0,No finding,0,0
+hcc_twin_29,hcc_safe_twin,hcc_g29,0,0,0,0.0,No finding,0,0
+hcc_pos_30,hcc_positive,hcc_g30,0,0,0,6e-06,No finding,0,0
+hcc_twin_30,hcc_safe_twin,hcc_g30,0,0,0,6e-06,No finding,0,0
+hcc_hard_01,hcc_hard_negative,hcc_h01,0,0,0,0.001468,No finding,0,0
+hcc_hard_02,hcc_hard_negative,hcc_h02,0,0,0,0.000294,No finding,0,0
+hcc_hard_03,hcc_hard_negative,hcc_h03,0,0,0,0.005513,No finding,0,0
+hcc_hard_04,hcc_hard_negative,hcc_h04,0,0,0,0.01,No finding,0,0
+hcc_hard_05,hcc_hard_negative,hcc_h05,0,0,0,0.0,No finding,0,0
+hcc_hard_06,hcc_hard_negative,hcc_h06,0,0,0,0.0,No finding,0,0
+hcc_hard_07,hcc_hard_negative,hcc_h07,0,0,0,0.0,No finding,0,0
+hcc_hard_08,hcc_hard_negative,hcc_h08,0,0,0,0.000747,No finding,0,0
+hcc_hard_09,hcc_hard_negative,hcc_h09,0,0,0,1e-06,No finding,0,0
+hcc_hard_10,hcc_hard_negative,hcc_h10,0,0,0,0.001491,No finding,0,0
+hcc_hard_11,hcc_hard_negative,hcc_h11,0,0,0,0.0,No finding,0,0
+hcc_hard_12,hcc_hard_negative,hcc_h12,0,0,0,0.0,No finding,0,0
+hcc_hard_13,hcc_hard_negative,hcc_h13,0,0,0,2e-06,No finding,0,0
+hcc_hard_14,hcc_hard_negative,hcc_h14,0,0,0,6e-06,No finding,0,0
+hcc_hard_15,hcc_hard_negative,hcc_h15,0,0,0,0.000678,No finding,0,0
+hcc_hard_16,hcc_hard_negative,hcc_h16,0,0,0,0.01,No finding,0,0
+hcc_hard_17,hcc_hard_negative,hcc_h17,0,0,0,1e-06,No finding,0,0
+hcc_hard_18,hcc_hard_negative,hcc_h18,0,0,0,0.0,No finding,0,0
+hcc_hard_19,hcc_hard_negative,hcc_h19,0,0,0,0.0,No finding,0,0
+hcc_hard_20,hcc_hard_negative,hcc_h20,0,0,0,0.00592,No finding,0,0
+hcc_hard_21,hcc_hard_negative,hcc_h21,0,0,0,0.0,No finding,0,0
+hcc_hard_22,hcc_hard_negative,hcc_h22,0,0,0,0.001649,No finding,0,0
+hcc_hard_23,hcc_hard_negative,hcc_h23,0,0,0,0.001086,No finding,0,0
+hcc_hard_24,hcc_hard_negative,hcc_h24,0,0,0,0.000575,No finding,0,0
+hcc_hard_25,hcc_hard_negative,hcc_h25,0,0,0,0.001571,No finding,0,0
+hcc_hard_26,hcc_hard_negative,hcc_h26,0,0,0,0.001173,No finding,0,0
+hcc_hard_27,hcc_hard_negative,hcc_h27,0,0,0,1e-05,No finding,0,0
+hcc_hard_28,hcc_hard_negative,hcc_h28,0,0,0,0.0,No finding,0,0
+hcc_hard_29,hcc_hard_negative,hcc_h29,0,0,0,0.001287,No finding,0,0
+hcc_hard_30,hcc_hard_negative,hcc_h30,0,0,0,5.9e-05,No finding,0,0
+hcc_plain_01,hcc_plain_negative,hcc_n01,0,0,0,0.0,No finding,0,0
+hcc_plain_02,hcc_plain_negative,hcc_n02,0,0,0,0.0,No finding,0,0
+hcc_plain_03,hcc_plain_negative,hcc_n03,0,0,0,0.003709,No finding,0,0
+hcc_plain_04,hcc_plain_negative,hcc_n04,0,0,0,0.0,No finding,0,0
+hcc_plain_05,hcc_plain_negative,hcc_n05,0,0,0,8e-06,No finding,0,0
+hcc_plain_06,hcc_plain_negative,hcc_n06,0,0,0,0.0,No finding,0,0
+hcc_plain_07,hcc_plain_negative,hcc_n07,0,0,0,0.000953,No finding,0,0
+hcc_plain_08,hcc_plain_negative,hcc_n08,0,0,0,0.015,No finding,0,0
+hcc_plain_09,hcc_plain_negative,hcc_n09,0,0,0,0.00049,No finding,0,0
+hcc_plain_10,hcc_plain_negative,hcc_n10,0,0,0,0.000725,No finding,0,0
+sqli_pos_01,sqli_positive,sqli_g01,1,1,1,0.938084,Critical,1,1
+sqli_twin_01,sqli_safe_twin,sqli_g01,0,0,0,0.010148,No finding,0,0
+sqli_pos_02,sqli_positive,sqli_g02,1,1,1,0.891501,Critical,1,1
+sqli_twin_02,sqli_safe_twin,sqli_g02,0,0,0,0.0,No finding,0,0
+sqli_pos_03,sqli_positive,sqli_g03,1,1,1,0.89,Critical,1,1
+sqli_twin_03,sqli_safe_twin,sqli_g03,0,0,0,0.065,No finding,0,0
+sqli_pos_04,sqli_positive,sqli_g04,1,1,1,0.996533,Critical,1,1
+sqli_twin_04,sqli_safe_twin,sqli_g04,0,0,0,5e-06,No finding,0,0
+sqli_pos_05,sqli_positive,sqli_g05,1,1,1,0.94778,Critical,1,1
+sqli_twin_05,sqli_safe_twin,sqli_g05,0,0,0,0.047474,No finding,0,0
+sqli_pos_06,sqli_positive,sqli_g06,1,1,0,0.000285,High,0,1
+sqli_twin_06,sqli_safe_twin,sqli_g06,0,0,0,6e-06,No finding,0,0
+sqli_pos_07,sqli_positive,sqli_g07,1,1,1,0.974932,Critical,1,1
+sqli_twin_07,sqli_safe_twin,sqli_g07,0,1,0,0.031977,High,0,1
+sqli_pos_08,sqli_positive,sqli_g08,1,1,1,0.668662,Critical,1,1
+sqli_twin_08,sqli_safe_twin,sqli_g08,0,1,0,0.514748,High,0,1
+sqli_pos_09,sqli_positive,sqli_g09,1,0,1,0.775,Medium,0,1
+sqli_twin_09,sqli_safe_twin,sqli_g09,0,0,0,0.085,No finding,0,0
+sqli_pos_10,sqli_positive,sqli_g10,1,0,1,0.999275,Medium,0,1
+sqli_twin_10,sqli_safe_twin,sqli_g10,0,0,0,0.107204,No finding,0,0
+sqli_pos_11,sqli_positive,sqli_g11,1,0,1,0.957935,Medium,0,1
+sqli_twin_11,sqli_safe_twin,sqli_g11,0,0,0,0.008352,No finding,0,0
+sqli_pos_12,sqli_positive,sqli_g12,1,1,1,0.992747,Critical,1,1
+sqli_twin_12,sqli_safe_twin,sqli_g12,0,0,0,0.004009,No finding,0,0
+sqli_pos_13,sqli_positive,sqli_g13,1,0,1,0.975147,Medium,0,1
+sqli_twin_13,sqli_safe_twin,sqli_g13,0,0,0,0.056393,No finding,0,0
+sqli_pos_14,sqli_positive,sqli_g14,1,1,0,0.213869,High,0,1
+sqli_twin_14,sqli_safe_twin,sqli_g14,0,0,0,0.002945,No finding,0,0
+sqli_pos_15,sqli_positive,sqli_g15,1,1,1,0.999999,Critical,1,1
+sqli_twin_15,sqli_safe_twin,sqli_g15,0,0,0,6.8e-05,No finding,0,0
+sqli_pos_16,sqli_positive,sqli_g16,1,1,1,0.795,Critical,1,1
+sqli_twin_16,sqli_safe_twin,sqli_g16,0,0,0,0.025,No finding,0,0
+sqli_pos_17,sqli_positive,sqli_g17,1,1,1,0.99712,Critical,1,1
+sqli_twin_17,sqli_safe_twin,sqli_g17,0,0,0,0.014076,No finding,0,0
+sqli_pos_18,sqli_positive,sqli_g18,1,1,1,0.595,Critical,1,1
+sqli_twin_18,sqli_safe_twin,sqli_g18,0,0,0,0.07,No finding,0,0
+sqli_pos_19,sqli_positive,sqli_g19,1,1,1,0.999876,Critical,1,1
+sqli_twin_19,sqli_safe_twin,sqli_g19,0,1,0,0.29963,High,0,1
+sqli_pos_20,sqli_positive,sqli_g20,1,1,1,0.685,Critical,1,1
+sqli_twin_20,sqli_safe_twin,sqli_g20,0,0,0,0.055,No finding,0,0
+sqli_pos_21,sqli_positive,sqli_g21,1,0,1,0.869504,Medium,0,1
+sqli_twin_21,sqli_safe_twin,sqli_g21,0,0,0,0.399724,No finding,0,0
+sqli_pos_22,sqli_positive,sqli_g22,1,1,1,0.72,Critical,1,1
+sqli_twin_22,sqli_safe_twin,sqli_g22,0,0,0,0.05,No finding,0,0
+sqli_pos_23,sqli_positive,sqli_g23,1,1,1,0.996013,Critical,1,1
+sqli_twin_23,sqli_safe_twin,sqli_g23,0,0,0,3.8e-05,No finding,0,0
+sqli_pos_24,sqli_positive,sqli_g24,1,1,1,0.997978,Critical,1,1
+sqli_twin_24,sqli_safe_twin,sqli_g24,0,0,0,0.149071,No finding,0,0
+sqli_pos_25,sqli_positive,sqli_g25,1,1,1,0.999151,Critical,1,1
+sqli_twin_25,sqli_safe_twin,sqli_g25,0,0,0,4.7e-05,No finding,0,0
+sqli_pos_26,sqli_positive,sqli_g26,1,1,1,0.901889,Critical,1,1
+sqli_twin_26,sqli_safe_twin,sqli_g26,0,0,0,0.000349,No finding,0,0
+sqli_pos_27,sqli_positive,sqli_g27,1,1,1,0.989435,Critical,1,1
+sqli_twin_27,sqli_safe_twin,sqli_g27,0,0,0,0.00315,No finding,0,0
+sqli_pos_28,sqli_positive,sqli_g28,1,1,1,0.918936,Critical,1,1
+sqli_twin_28,sqli_safe_twin,sqli_g28,0,0,0,1e-06,No finding,0,0
+sqli_pos_29,sqli_positive,sqli_g29,1,1,1,0.661423,Critical,1,1
+sqli_twin_29,sqli_safe_twin,sqli_g29,0,1,0,0.009138,High,0,1
+sqli_pos_30,sqli_positive,sqli_g30,1,1,1,0.990964,Critical,1,1
+sqli_twin_30,sqli_safe_twin,sqli_g30,0,0,0,0.01592,No finding,0,0
+sqli_hard_01,sqli_hard_negative,sqli_h01,0,1,1,0.608053,Critical,1,1
+sqli_hard_02,sqli_hard_negative,sqli_h02,0,1,0,0.160001,High,0,1
+sqli_hard_03,sqli_hard_negative,sqli_h03,0,1,0,0.003334,High,0,1
+sqli_hard_04,sqli_hard_negative,sqli_h04,0,0,0,0.167774,No finding,0,0
+sqli_hard_05,sqli_hard_negative,sqli_h05,0,0,1,0.69,Medium,0,1
+sqli_hard_06,sqli_hard_negative,sqli_h06,0,0,0,0.045,No finding,0,0
+sqli_hard_07,sqli_hard_negative,sqli_h07,0,1,0,0.017028,High,0,1
+sqli_hard_08,sqli_hard_negative,sqli_h08,0,1,0,0.105,High,0,1
+sqli_hard_09,sqli_hard_negative,sqli_h09,0,0,0,0.003888,No finding,0,0
+sqli_hard_10,sqli_hard_negative,sqli_h10,0,0,0,0.087905,No finding,0,0
+sqli_hard_11,sqli_hard_negative,sqli_h11,0,0,1,0.895055,Medium,0,1
+sqli_hard_12,sqli_hard_negative,sqli_h12,0,0,0,0.0,No finding,0,0
+sqli_hard_13,sqli_hard_negative,sqli_h13,0,0,0,1.1e-05,No finding,0,0
+sqli_hard_14,sqli_hard_negative,sqli_h14,0,0,0,1e-06,No finding,0,0
+sqli_hard_15,sqli_hard_negative,sqli_h15,0,0,0,0.329516,No finding,0,0
+sqli_hard_16,sqli_hard_negative,sqli_h16,0,0,0,0.000512,No finding,0,0
+sqli_hard_17,sqli_hard_negative,sqli_h17,0,0,0,0.003227,No finding,0,0
+sqli_hard_18,sqli_hard_negative,sqli_h18,0,1,1,0.648454,Critical,1,1
+sqli_hard_19,sqli_hard_negative,sqli_h19,0,0,0,0.016874,No finding,0,0
+sqli_hard_20,sqli_hard_negative,sqli_h20,0,0,0,0.14981,No finding,0,0
+sqli_hard_21,sqli_hard_negative,sqli_h21,0,1,0,0.075242,High,0,1
+sqli_hard_22,sqli_hard_negative,sqli_h22,0,1,0,0.37,High,0,1
+sqli_hard_23,sqli_hard_negative,sqli_h23,0,0,0,0.000553,No finding,0,0
+sqli_hard_24,sqli_hard_negative,sqli_h24,0,0,0,0.065338,No finding,0,0
+sqli_hard_25,sqli_hard_negative,sqli_h25,0,1,1,0.998129,Critical,1,1
+sqli_hard_26,sqli_hard_negative,sqli_h26,0,0,1,0.691923,Medium,0,1
+sqli_hard_27,sqli_hard_negative,sqli_h27,0,0,0,0.070602,No finding,0,0
+sqli_hard_28,sqli_hard_negative,sqli_h28,0,0,0,0.06,No finding,0,0
+sqli_hard_29,sqli_hard_negative,sqli_h29,0,1,0,0.009591,High,0,1
+sqli_hard_30,sqli_hard_negative,sqli_h30,0,0,0,0.025,No finding,0,0
+sqli_plain_01,sqli_plain_negative,sqli_n01,0,0,0,0.00497,No finding,0,0
+sqli_plain_02,sqli_plain_negative,sqli_n02,0,0,0,0.001368,No finding,0,0
+sqli_plain_03,sqli_plain_negative,sqli_n03,0,0,0,0.003159,No finding,0,0
+sqli_plain_04,sqli_plain_negative,sqli_n04,0,0,0,0.0,No finding,0,0
+sqli_plain_05,sqli_plain_negative,sqli_n05,0,0,0,0.005,No finding,0,0
+sqli_plain_06,sqli_plain_negative,sqli_n06,0,0,0,4.1e-05,No finding,0,0
+sqli_plain_07,sqli_plain_negative,sqli_n07,0,0,0,0.000733,No finding,0,0
+sqli_plain_08,sqli_plain_negative,sqli_n08,0,0,0,0.002332,No finding,0,0
+sqli_plain_09,sqli_plain_negative,sqli_n09,0,0,0,1.8e-05,No finding,0,0
+sqli_plain_10,sqli_plain_negative,sqli_n10,0,0,0,0.001975,No finding,0,0

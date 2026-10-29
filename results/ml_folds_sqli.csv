@@ -1,0 +1,6 @@
+fold,model,params,threshold,inner_f1,n_train,n_test,test_positives
+1,logistic_regression,{'clf__C': 1.0},0.607801,0.8316,160,40,6
+2,random_forest,"{'max_depth': None, 'min_samples_leaf': 1}",0.59,0.8359,160,40,6
+3,logistic_regression,{'clf__C': 1.0},0.629094,0.8063,160,40,6
+4,logistic_regression,{'clf__C': 10.0},0.5,0.8739,160,40,6
+5,logistic_regression,{'clf__C': 10.0},0.5,0.869,160,40,6
