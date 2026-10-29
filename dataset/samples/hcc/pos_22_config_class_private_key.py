@@ -1,0 +1,7 @@
+class ProductionConfig:
+    DEBUG = False
+    SIGNING_ALGORITHM = "RS256"
+    PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAu1SU1LfVLPHCozMxH2Mo4lgOEePzNm0tRgeLezV6ffAt0gun
+VTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u+qKhbwKfBstIs+bMY2Zkp18gnTxK
+-----END RSA PRIVATE KEY-----"""

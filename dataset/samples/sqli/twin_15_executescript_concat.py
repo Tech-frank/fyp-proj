@@ -1,0 +1,9 @@
+import sqlite3
+
+
+def reset_user_data(db_path, username):
+    conn = sqlite3.connect(db_path)
+    with conn:
+        conn.execute("DELETE FROM sessions WHERE user = ?", (username,))
+        conn.execute("DELETE FROM carts WHERE user = ?", (username,))
+    conn.close()

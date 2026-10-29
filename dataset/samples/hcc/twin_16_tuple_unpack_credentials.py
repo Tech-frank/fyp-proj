@@ -1,0 +1,12 @@
+import os
+
+import requests
+
+BASE = "https://intranet.example.com/api"
+username, password = os.environ["REPORTS_USER"], os.environ["REPORTS_PASSWORD"]
+
+
+def fetch_report(report_id):
+    r = requests.get(f"{BASE}/reports/{report_id}", auth=(username, password), timeout=15)
+    r.raise_for_status()
+    return r.json()
