@@ -1,7 +1,7 @@
 """Part 10: metric and McNemar arithmetic, checked against hand-worked values."""
 import pytest
 
-from evaluate import compare, mcnemar_exact, metrics
+from evaluate import compare, mcnemar_exact, metrics, metrics_by_source
 
 
 def test_metrics_hand_worked():
@@ -34,3 +34,16 @@ def test_compare_counts_right_and_wrong_not_yes_and_no():
     result = compare(labels, first, second)
     assert (result["both_right"], result["first_only_right"],
             result["second_only_right"], result["both_wrong"]) == (1, 1, 1, 1)
+
+
+def test_metrics_split_by_source():
+    rows = []
+    for source, label, pred in [("ai-drafted", 1, 1), ("ai-drafted", 0, 0),
+                                ("creddata", 1, 0), ("creddata", 0, 1), ("securityeval", 1, 1)]:
+        rows.append({"source": source, "label": label, "static": pred, "ml": pred,
+                     "hybrid_agreement": pred, "hybrid_union": pred})
+    by = {(r["group"], r["configuration"]): r for r in metrics_by_source(rows)}
+    assert by[("synthetic", "static")]["f1"] == 1.0
+    assert by[("external", "static")]["samples"] == 3
+    assert by[("external:creddata", "static")]["FP"] == 1
+    assert by[("external:securityeval", "static")]["TP"] == 1

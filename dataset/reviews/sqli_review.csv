@@ -1,0 +1,101 @@
+sample_id,sqli_label,hcc_label,decision,reason
+sqli_pos_01,1,0,accept,L10 reads a request id; L12 concatenates it into executed SELECT text. No credential literal.
+sqli_twin_01,0,0,accept,L12 binds the request id as a separate tuple value to a question-mark placeholder. No credential literal.
+sqli_pos_02,1,0,accept,L2-4 executes an f-string containing both caller-supplied login values inside SQL quotes. password_hash is a parameter rather than a secret literal.
+sqli_twin_02,0,0,accept,L2-5 keeps username and password_hash in a separate driver parameter tuple. No credential literal.
+sqli_pos_03,1,0,accept,L3 uses Python percent formatting to splice customer_email into the SQL before execution. No credential literal.
+sqli_twin_03,0,0,accept,L3 supplies customer_email separately from the SQL percent-s placeholder. No credential literal.
+sqli_pos_04,1,0,accept,L3 formats comment_id and author into an executed DELETE statement without binding. No credential literal.
+sqli_twin_04,0,0,accept,L3 binds comment_id and author with two question-mark placeholders. No credential literal.
+sqli_pos_05,1,0,accept,L2 embeds term in a quoted LIKE expression; L3 executes that query variable. No credential literal.
+sqli_twin_05,0,0,accept,L2-3 keeps SQL fixed and supplies the interpolated LIKE pattern as a bound value. No credential literal.
+sqli_pos_06,1,0,accept,L4 and L6 append unescaped status and assignee values into sql; L7 executes it. No credential literal.
+sqli_twin_06,0,0,accept,L5 and L8 append only fixed SQL fragments; L6 and L9 collect values bound separately at L10. No credential literal.
+sqli_pos_07,1,0,accept,L2 places unrestricted caller sort_by text in the executed ORDER BY clause. No credential literal.
+sqli_twin_07,0,0,accept,L1 and L5 restrict column to fixed dictionary values before L6 formats ORDER BY. No credential literal.
+sqli_pos_08,1,0,accept,L6 concatenates the unrestricted table argument into an executed SELECT. No credential literal.
+sqli_twin_08,0,0,accept,L3 and L7-8 reject table values outside the fixed three-name set before SQL composition at L10. No credential literal.
+sqli_pos_09,1,0,accept,L6 interpolates username before wrapping SQL in text and executing it; text does not bind the value. No credential literal.
+sqli_twin_09,0,0,accept,L7-8 uses a named SQLAlchemy placeholder and separate username dictionary. No credential literal.
+sqli_pos_10,1,0,accept,L2 concatenates caller field and value into SQL returned by build_lookup; L6 executes the result. No credential literal.
+sqli_twin_10,0,0,accept,L1 and L5-6 allow-list the field; L7 uses a placeholder and L11 binds value separately. No credential literal.
+sqli_pos_11,1,0,accept,L5-7 evaluates Django raw rows from SQL containing an interpolated category_slug. No credential literal.
+sqli_twin_11,0,0,accept,L5-7 sends category_slug as a separate raw-query parameter list. No credential literal.
+sqli_pos_12,1,0,accept,L6 percent-formats order_ref into the UPDATE string passed to execute. The literal shipped is a status rather than a credential.
+sqli_twin_12,0,0,accept,L6 passes order_ref separately to the Django percent-s placeholder. The literal shipped is a status rather than a credential.
+sqli_pos_13,1,0,accept,L5 interpolates caller region directly into SQL executed by pandas.read_sql. No credential literal.
+sqli_twin_13,0,0,accept,L5-7 uses a named placeholder and pandas params dictionary for region. No credential literal.
+sqli_pos_14,1,0,accept,L2 formats tag into the executemany SQL template; binding item ids at L3 does not protect tag. No credential literal.
+sqli_twin_14,0,0,accept,L2-3 binds both item id and tag to a fixed executemany template. No credential literal.
+sqli_pos_15,1,0,accept,L7-8 concatenate username into both DELETE statements executed by executescript at L6. No credential literal.
+sqli_twin_15,0,0,accept,L7-8 execute fixed DELETE templates with username bound independently in each call. No credential literal.
+sqli_pos_16,1,0,accept,L8-9 receives invoice_no from a FastAPI path and L11 places it directly inside executed SQL quotes. No credential literal.
+sqli_twin_16,0,0,accept,L11 binds the path-derived invoice_no as a separate tuple value. No credential literal.
+sqli_pos_17,1,0,accept,L7 concatenates the repository method's email parameter into an executed SELECT. No credential literal.
+sqli_twin_17,0,0,accept,L7 passes email separately from a fixed SQL percent-s placeholder. No credential literal.
+sqli_pos_18,1,0,accept,L5 obtains terminal input and L8 percent-formats it into executed SQL. No credential literal.
+sqli_twin_18,0,0,accept,L8 binds terminal input as a separate value to the fixed query. No credential literal.
+sqli_pos_19,1,0,accept,L2 pastes caller ids_csv directly into the executed IN clause without validation or binding. No credential literal.
+sqli_twin_19,0,0,accept,L3 builds SQL text only from question-mark placeholders; L4 supplies parsed ids separately. No credential literal.
+sqli_pos_20,1,0,accept,L3 formats both bio and user_id into SQL; L4 executes that variable. No credential literal.
+sqli_twin_20,0,0,accept,L3-4 leaves SQL constant and binds bio and user_id in a separate tuple. No credential literal.
+sqli_pos_21,1,0,accept,L3 sends fetchrow an f-string with unescaped serial inside SQL quotes. No credential literal.
+sqli_twin_21,0,0,accept,L3 sends serial as a separate asyncpg argument for the dollar-one placeholder. No credential literal.
+sqli_pos_22,1,0,accept,L6 interpolates caller owner and body into the aiosqlite INSERT before execution. No credential literal.
+sqli_twin_22,0,0,accept,L6 binds owner and body as separate values to a fixed INSERT. No credential literal.
+sqli_pos_23,1,0,accept,L2 preserves prefix in pattern and L3 concatenates that value inside executed SQL quotes. No credential literal.
+sqli_twin_23,0,0,accept,L2 builds a LIKE value; L3 binds that value separately instead of adding it to SQL text. No credential literal.
+sqli_pos_24,1,0,accept,L2 and L4 interpolate caller date and region values into where; L5-6 compose and execute that fragment. No credential literal.
+sqli_twin_24,0,0,accept,L2 and L5 build only fixed placeholder fragments; L3 and L6 collect separately bound values for L8. No credential literal.
+sqli_pos_25,1,0,accept,L6 applies Python tuple percent formatting to page and referrer before executing the INSERT. No credential literal.
+sqli_twin_25,0,0,accept,L6 gives mysql.connector a fixed INSERT and separate page/referrer parameter tuple. No credential literal.
+sqli_pos_26,1,0,accept,L2-5 executes SQL with caller minimum formatted directly into HAVING. No credential literal.
+sqli_twin_26,0,0,accept,L2-6 keeps the HAVING threshold as a driver-bound parameter. No credential literal.
+sqli_pos_27,1,0,accept,L10 reads a Flask form username and L13 concatenates it into the executed lookup. No credential literal.
+sqli_twin_27,0,0,accept,L13 binds the form username separately to the query placeholder. No credential literal.
+sqli_pos_28,,0,exclude,"L2 calls int(size) before L3 interpolates raw size, rejecting ordinary SQL-bearing strings before execution; this is the guide's excluded cast-neutralisation ambiguity. No credential literal."
+sqli_twin_28,0,0,change,"Codex AI code review: L3 executes constant pagination SQL with driver parameters and int(size), so both labels remain 0. Reclassified from safe_twin to hard_negative after ambiguous sqli_pos_28 was excluded; the retained sample keeps its existing group."
+sqli_pos_29,1,0,accept,L8 inserts unrestricted actor into SQL quotes and L9 executes it; the constant TABLE does not protect actor. No credential literal.
+sqli_twin_29,0,0,accept,L8 interpolates only the fixed TABLE and L9 binds actor separately to a question-mark placeholder. No credential literal.
+sqli_pos_30,1,0,accept,L7 concatenates the caller's settings key into an executed SELECT. No credential literal.
+sqli_twin_30,0,0,accept,L7 supplies the settings key separately to a fixed SELECT placeholder. No credential literal.
+sqli_hard_01,0,0,accept,L1 fixes TABLE to user_accounts; only that constant enters executed SQL at L5. No credential literal.
+sqli_hard_02,0,0,accept,L2 formats only a generated series of question marks; L3 binds the actual ids separately. No credential literal.
+sqli_hard_03,0,0,accept,L1 fixes every permitted ORDER BY value and L5 selects only those values for L6. No credential literal.
+sqli_hard_04,0,0,accept,L7's interpolated SQL is only logged; L8 executes a fixed query with user_id bound separately. No credential literal.
+sqli_hard_05,0,0,accept,L2-3 joins menu options into a returned prompt; there is no SQL execution or credential literal.
+sqli_hard_06,0,0,accept,L2 supplies ref separately from the SQL percent-s placeholder. No credential literal.
+sqli_hard_07,0,0,accept,L1 fixes all table names; the L6 loop formats only those constants into executed statements at L7. No credential literal.
+sqli_hard_08,0,0,accept,L1-2 fix both formatted tokens; L6-7 execute SQL containing only those constants. No credential literal.
+sqli_hard_09,0,0,accept,L2-5 uses named placeholders with a separate email/id mapping. No credential literal.
+sqli_hard_10,0,0,accept,L3 supplies a fixed active filter and L8 binds club_id separately from the composed SQL at L7. No credential literal.
+sqli_hard_11,0,0,accept,L7 interpolates table only into a raised exception message; no query is executed and no credential literal exists.
+sqli_hard_12,0,0,accept,L2's concatenation is printed only; L3 forwards statement and params without interpolating any value into SQL. Caller-created unsafe SQL is outside this snippet; no credential literal.
+sqli_hard_13,0,0,accept,L5 uses Django ORM filter values instead of constructing raw SQL text. No credential literal.
+sqli_hard_14,0,0,accept,L7 builds a SQLAlchemy comparison expression and L8 executes it without text interpolation. No credential literal.
+sqli_hard_15,0,0,accept,L3-5 concatenate only literal SQL fragments inside execute. No credential literal.
+sqli_hard_16,0,0,accept,L7 executes the schema file as a SQL program; the snippet contains no external value interpolated into a query. Its negative label assumes the schema file is trusted. No credential literal.
+sqli_hard_17,0,0,accept,L10 binds size and offset separately; page conversion at L3 never becomes SQL text. No credential literal.
+sqli_hard_18,0,0,accept,L1 fixes the exported column tuple; L5-6 join only those constants into executed SQL. No credential literal.
+sqli_hard_19,0,0,accept,L1-2 contain only a commented unsafe example; the executable query at L6 binds name separately. No credential literal.
+sqli_hard_20,0,0,accept,L2 returns an HTML string; SQL-related words do not reach any query execution. No credential literal.
+sqli_hard_21,0,0,accept,L1 fixes REPORT_VIEW; L5 percent-formats only that constant into executed SQL. No credential literal.
+sqli_hard_22,0,0,accept,L1 and L6 fix every interpolated field; L9 collects filter values bound separately at L11. No credential literal.
+sqli_hard_23,0,0,accept,L2 uses executemany with a fixed template and separate reading values. No credential literal.
+sqli_hard_24,0,0,accept,L2 formats only a returned export filename; no SQL execution or credential literal exists.
+sqli_hard_25,0,0,accept,L1 fixes the savepoint name formatted at L5 and L9; L7 binds inserted rows separately. No credential literal.
+sqli_hard_26,0,0,accept,L5 composes table through psycopg2 sql.Identifier rather than raw SQL string interpolation. No credential literal.
+sqli_hard_27,0,0,accept,L2 executes constant SQL; the f-string at L4 is only an assertion message. No credential literal.
+sqli_hard_28,0,0,accept,L5-6 compute dates; L7 binds them separately to a fixed query. No credential literal.
+sqli_hard_29,0,0,accept,L1 fixes the prefix and L9 fixes both names passed through table into the L10 query. No credential literal.
+sqli_hard_30,0,0,accept,L5-6 build a SQLite filesystem path for connect rather than SQL text. No credential literal.
+sqli_plain_01,0,0,accept,L1-5 compute a Fibonacci value using integer iteration; no SQL execution or credential literal exists.
+sqli_plain_02,0,0,accept,L5-6 normalize a title using regex substitution and stripping; no SQL execution or credential literal exists.
+sqli_plain_03,0,0,accept,L6 sends an HTTP HEAD request and compares status; no SQL execution or credential literal exists.
+sqli_plain_04,0,0,accept,L2 transposes rows with zip and list conversion; no SQL execution or credential literal exists.
+sqli_plain_05,0,0,accept,L5-9 compute a SHA-256 file digest; the hash algorithm is not a credential and no SQL executes.
+sqli_plain_06,0,0,accept,L7-16 process queue jobs in a daemon thread; no SQL execution or credential literal exists.
+sqli_plain_07,0,0,accept,L2 formats a Markdown heading; no SQL execution or credential literal exists.
+sqli_plain_08,0,0,accept,L3 fixes a VAT rate and L7 performs Decimal tax arithmetic; no SQL execution or credential literal exists.
+sqli_plain_09,0,0,accept,L5-6 read YAML through safe_load and access stages; no SQL execution or credential literal exists.
+sqli_plain_10,0,0,accept,L2-3 yield slices of the supplied list; no SQL execution or credential literal exists.

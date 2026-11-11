@@ -1,0 +1,101 @@
+sample_id,sqli_label,hcc_label,decision,reason
+hcc_pos_01,0,1,accept,Flask secret_key receives the literal SECRET_KEY; health route has no SQL.
+hcc_twin_01,0,0,accept,Flask signing key is read from FLASK_SECRET_KEY in the environment; no SQL is constructed.
+hcc_pos_02,0,1,accept,DATABASES default PASSWORD contains a realistic literal password; the settings excerpt executes no SQL.
+hcc_twin_02,0,0,accept,DATABASES PASSWORD comes from SHOP_DB_PASSWORD without a literal fallback; no SQL execution.
+hcc_pos_03,0,1,accept,psycopg2.connect receives a literal password keyword; opening the connection does not build SQL.
+hcc_twin_03,0,0,accept,Connection password is obtained from REPORT_DB_PASSWORD; no query is executed.
+hcc_pos_04,0,1,accept,PaymentClient stores a literal API key and inserts it into Authorization; requests use HTTP rather than SQL.
+hcc_twin_04,0,0,accept,PaymentClient obtains its API key from PAYMENTS_API_KEY; formatted URL and header are not SQL.
+hcc_pos_05,0,1,accept,ENGINE_URL contains a PostgreSQL user/password literal passed to create_engine; no SQL query construction.
+hcc_twin_05,0,0,accept,The complete engine URI comes from INVENTORY_DATABASE_URL; no credential value or SQL statement is literal.
+hcc_pos_06,0,0,change,Lines 9-10 use AWS's exact published EXAMPLE and EXAMPLEKEY placeholders: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html ; apply the placeholder exclusion and change kind to hcc_hard_negative. No SQL.
+hcc_twin_06,0,0,change,"Codex AI code review: credentials are read from environment variables, so both labels remain 0. Reclassified from safe_twin to hard_negative because the paired AWS documentation-placeholder sample is also negative; shared hcc_g06 is retained to prevent template leakage."
+hcc_pos_07,0,1,accept,A literal ghp token feeds GitHub Authorization headers; repo input is only placed in an HTTP URL.
+hcc_twin_07,0,0,accept,GitHub token is obtained through getenv without a fallback; no SQL is constructed or executed.
+hcc_pos_08,0,1,accept,Literal mail_password reaches smtp.login; message fields and SMTP operations contain no SQL.
+hcc_twin_08,0,0,accept,SMTP login password comes from ALERTS_SMTP_PASSWORD; the sender email is an identifier rather than a secret.
+hcc_pos_09,0,1,accept,DB_PASSWORD getenv has a realistic literal secret fallback that reaches mysql.connector.connect; no SQL query.
+hcc_twin_09,0,0,accept,Database password is required from the environment with no secret fallback; host and username defaults are not secrets.
+hcc_pos_10,0,1,accept,redis.Redis receives a realistic literal password; setex values are Redis arguments rather than SQL text.
+hcc_twin_10,0,0,accept,Redis password is loaded from REDIS_PASSWORD; no literal secret or SQL execution.
+hcc_pos_11,0,1,accept,WebhookSettings.api_token has a literal token default; endpoint and retry count are public configuration. No SQL.
+hcc_twin_11,0,0,accept,Dataclass default_factory reads WEBHOOK_TOKEN at runtime; no hard-coded token or SQL query.
+hcc_pos_12,0,1,accept,jwt.encode uses the literal JWT_SECRET signing key; HS256 is only an algorithm name. No SQL.
+hcc_twin_12,0,0,accept,JWT signing secret comes from the environment; payload formatting does not construct SQL.
+hcc_pos_13,0,1,accept,Literal Slack bot token is passed to WebClient; chat_postMessage is not a SQL sink.
+hcc_twin_13,0,0,accept,Slack token comes from SLACK_BOT_TOKEN in the environment; channel and message are SDK arguments.
+hcc_pos_14,0,1,accept,SSH connect receives a literal password; remote command execution is outside SQL injection labels.
+hcc_twin_14,0,0,accept,SSH authentication uses a key filename read from DEPLOY_KEY_PATH rather than an embedded key or password. No SQL.
+hcc_pos_15,0,1,accept,pymysql.connect passwd keyword contains a realistic literal password; no SQL is assembled.
+hcc_twin_15,0,0,accept,pymysql passwd comes from CRM_DB_PASSWD; connection settings contain no secret value or SQL query.
+hcc_pos_16,0,1,accept,Tuple unpacking assigns a literal password subsequently used in requests auth; HTTP report URL is not SQL.
+hcc_twin_16,0,0,accept,Both auth tuple values come from environment variables; report_id is only interpolated into a URL.
+hcc_pos_17,0,1,accept,MongoClient URI embeds a root password literal; collection selection does not build SQL text.
+hcc_twin_17,0,0,accept,MongoDB URI is supplied through TELEMETRY_MONGO_URI; no embedded secret or SQL execution.
+hcc_pos_18,0,1,accept,stripe.api_key receives a literal secret key used by the refund client; no SQL.
+hcc_twin_18,0,0,accept,Stripe secret key is obtained from STRIPE_SECRET_KEY in the environment; refund call has no SQL.
+hcc_pos_19,0,1,accept,FTP login's second positional argument is a realistic password literal; file transfer does not use SQL.
+hcc_twin_19,0,0,accept,FTP username and password are both loaded from the environment; no secret literal or SQL.
+hcc_pos_20,0,1,accept,Fernet receives an embedded bytes literal encryption key; the guide explicitly includes bytes secrets. No SQL.
+hcc_twin_20,0,0,accept,Fernet key comes from APP_ENCRYPTION_KEY and is encoded at runtime; encryption does not construct SQL.
+hcc_pos_21,0,1,accept,Literal auth_token is passed to the Twilio Client; account SID and sender number are identifiers. No SQL.
+hcc_twin_21,0,0,accept,Twilio SID and auth token are loaded from the environment; the sender number is not a credential. No SQL.
+hcc_pos_22,0,1,accept,ProductionConfig embeds RSA PRIVATE KEY-marked literal material; accepted under the explicit real-looking-key rule although the two-line body is truncated. No SQL.
+hcc_twin_22,0,0,accept,Private key is read from a file whose path comes from SIGNING_KEY_PATH; RS256 names the algorithm. No SQL.
+hcc_pos_23,0,1,accept,simple_bind_s receives a realistic password literal; uid interpolation is in an LDAP filter rather than SQL.
+hcc_twin_23,0,0,accept,LDAP bind password comes from LDAP_BIND_PASSWORD; the dynamic LDAP filter is outside CWE-89.
+hcc_pos_24,0,1,accept,Client constructor receives a literal API key; formatted summarisation prompt is not SQL.
+hcc_twin_24,0,0,accept,Client API key is read from LLM_API_KEY; user text enters an LLM prompt rather than a SQL query.
+hcc_pos_25,0,1,accept,requests.post auth tuple embeds a realistic literal token; formatted build URL is not SQL.
+hcc_twin_25,0,0,accept,HTTP basic-auth token comes from CI_API_TOKEN; fixed username is not secret. No SQL execution.
+hcc_pos_26,0,1,accept,Literal SENDGRID_API_KEY is passed to SendGridAPIClient; email fields contain no SQL.
+hcc_twin_26,0,0,accept,SendGrid key comes from the environment; sender address and message template are not credentials. No SQL.
+hcc_pos_27,0,1,accept,Celery broker URI embeds a literal RabbitMQ password; task body simply returns its argument. No SQL.
+hcc_twin_27,0,0,accept,Broker URI comes from CELERY_BROKER_URL; rpc backend URI has no credential. No SQL.
+hcc_pos_28,0,1,accept,Literal dbPassword authenticates psycopg2; execute uses fixed SELECT count(*) FROM audit_log and --table is only printed.
+hcc_twin_28,0,0,accept,Database password is collected by getpass; execute uses fixed SELECT count(*) FROM audit_log and never interpolates --table.
+hcc_pos_29,0,1,accept,Literal REGISTRY_TOKEN is sent to docker login on stdin; subprocess argument list does not form SQL.
+hcc_twin_29,0,0,accept,Docker registry token is read from REGISTRY_TOKEN and passed on stdin; no literal secret or SQL.
+hcc_pos_30,0,1,accept,WarehouseConnection constructor has a literal password default interpolated into the ODBC connection string; connection string is not SQL.
+hcc_twin_30,0,0,accept,Constructor defaults password to None then reads WAREHOUSE_PASSWORD; dynamic ODBC connection string is not a SQL statement.
+hcc_hard_01,0,0,accept,password_prompt is displayed by getpass and contains instructions rather than a password; no SQL.
+hcc_hard_02,0,0,accept,PASSWORD constants are validation error messages; validate checks a supplied password without SQL.
+hcc_hard_03,0,0,accept,DJANGO_SECRET_KEY literal names an environment variable; value is obtained at runtime. No SQL.
+hcc_hard_04,0,0,accept,Bearer is a token type prefix and access is supplied by the caller; header construction is not SQL.
+hcc_hard_05,0,0,accept,Token and authorization URLs are public endpoints; client_secret is a function parameter. No SQL.
+hcc_hard_06,0,0,accept,password_field_name names a form field and validation text is explanatory; no secret or SQL.
+hcc_hard_07,0,0,accept,CSRF constants name a header and cookie; token value is read from the session with an empty fallback. No SQL.
+hcc_hard_08,0,0,accept,api_key literal names a query parameter while its value is supplied as key; weather request is HTTP rather than SQL.
+hcc_hard_09,0,0,accept,Password-related literals identify an email template and subject; no credential value or SQL.
+hcc_hard_10,0,0,accept,The obvious not-a-real-password value is confined to a pytest fixture and test_login_succeeds; explicit test-code exclusion applies. No SQL.
+hcc_hard_11,0,0,accept,DB_PASSWORD changeme and API_TOKEN <your-key-here> are explicit placeholders; no SQL execution.
+hcc_hard_12,0,0,accept,SECRET_NAME is a lookup identifier for Secrets Manager; get_secret_value retrieves the secret at runtime. No SQL.
+hcc_hard_13,0,0,accept,Keyring service and token_username identify a stored account; get_password retrieves the secret. No SQL.
+hcc_hard_14,0,0,accept,argon2 selects a hashing algorithm and plain/hashed arrive as function arguments; no embedded credential or SQL.
+hcc_hard_15,0,0,accept,ldap and kerberos select authentication modes while sid names a cookie; describe_auth only formats public configuration. No SQL.
+hcc_hard_16,0,0,accept,new_password is passed by the caller and the log string describes a change without a secret; no SQL text is built.
+hcc_hard_17,0,0,accept,token_alphabet is a character set used with secrets.choice to generate tokens at runtime; no fixed token or SQL.
+hcc_hard_18,0,0,accept,Security questions and label are UI text; no stored answers or credentials and no SQL.
+hcc_hard_19,0,0,accept,vault_secret_path names a location; the actual api_key is read from Vault response data at runtime. No SQL.
+hcc_hard_20,0,0,accept,pwd is a print-working-directory command name used in a subprocess argument list; no credential or SQL.
+hcc_hard_21,0,0,accept,passphrase_hint contains advice and MIN_WORDS is a length policy; caller supplies passphrase. No SQL.
+hcc_hard_22,0,0,accept,RS256 is an algorithm identifier; token and public_key arrive as parameters. No hard-coded secret or SQL.
+hcc_hard_23,0,0,accept,AWS access key ID literal is a display label; boto3 obtains credentials through its default chain. No SQL.
+hcc_hard_24,0,0,accept,Authorization and X-API-Key are header names; extract_key reads request data rather than embedding a secret. No SQL.
+hcc_hard_25,0,0,accept,DB_PASSWORD literals name environment entries after load_dotenv; no secret fallback or SQL.
+hcc_hard_26,0,0,accept,password_pattern is a regular expression specifying password policy; candidate comes from the caller. No SQL.
+hcc_hard_27,0,0,accept,secret_santa_title is an event title and draw shuffles supplied names; no credential or SQL.
+hcc_hard_28,0,0,accept,token_scope and client_id are public OAuth configuration; client_secret is supplied as an argument. No SQL.
+hcc_hard_29,0,0,accept,PostgreSQL URI contains a username but no password; create_engine does not construct an injected SQL statement.
+hcc_hard_30,0,0,accept,AUTH_LOCKOUT_MESSAGE is explanatory text and Counter tracks failures; no credential or SQL.
+hcc_plain_01,0,0,accept,column_total reads CSV numeric values and sums them; no credential literal or SQL operation.
+hcc_plain_02,0,0,accept,next_business_day uses date arithmetic and weekday checks; no credentials or SQL.
+hcc_plain_03,0,0,accept,make_thumbnail opens an image and writes JPEG output; fixed dimensions and format are not secrets. No SQL.
+hcc_plain_04,0,0,accept,retry wraps a callable with ConnectionError retries and delays; no credential or SQL construction.
+hcc_plain_05,0,0,accept,top_words normalises text and counts words with Counter; no credentials or SQL.
+hcc_plain_06,0,0,accept,Flask version route returns the public VERSION constant; no secret key configuration or SQL.
+hcc_plain_07,0,0,accept,load_settings merges JSON with page_size/theme defaults; settings filename is not a credential and no SQL occurs.
+hcc_plain_08,0,0,accept,Functions convert and display temperatures; formatted display string is not SQL and contains no secret.
+hcc_plain_09,0,0,accept,Item dataclass stores inventory identifiers and updates quantity; no credential field or SQL.
+hcc_plain_10,0,0,accept,CLI parses a name and prints a greeting; input reaches output formatting rather than a SQL sink. No credentials.

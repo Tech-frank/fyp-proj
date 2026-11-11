@@ -10,6 +10,9 @@ For each target this writes:
   results/eval_metrics_<target>.csv      TP/FP/TN/FN, precision, recall, F1, FPR
   results/eval_mcnemar_<target>.csv      exact McNemar tests (hybrid vs baselines)
   results/eval_disagreements_<target>.csv samples where static and ML disagree
+  results/eval_by_source_<target>.csv    the same metrics split by data source
+                                         (synthetic vs external), to show whether
+                                         results hold on real-world code
 
 Configurations (chapter 3.7.4):
   static              a rule fired anywhere in the file for that class
@@ -149,6 +152,7 @@ def evaluate_target(target: str, samples: list[dict], fired: dict[str, set[str]]
         row = {
             "sample_id": sid,
             "kind": sample.get("kind", ""),
+            "source": sample.get("source", ""),
             "group_id": sample["group_id"],
             "label": sample[label_column],
             "static": int(rule),
@@ -178,7 +182,36 @@ def evaluate_target(target: str, samples: list[dict], fired: dict[str, set[str]]
     ]
     disagreements = [row for row in per_sample if row["static"] != row["ml"]]
     return {"per_sample": per_sample, "metrics": metric_rows,
-            "mcnemar": mcnemar_rows, "disagreements": disagreements}
+            "mcnemar": mcnemar_rows, "disagreements": disagreements,
+            "by_source": metrics_by_source(per_sample)}
+
+
+SYNTHETIC_SOURCES = {"ai-drafted", "handwritten"}
+
+
+def source_group(source: str) -> str:
+    return "synthetic" if source in SYNTHETIC_SOURCES else "external"
+
+
+def metrics_by_source(per_sample: list[dict]) -> list[dict]:
+    """Metrics for each configuration, split into synthetic vs external
+    samples and by individual source. Small groups give unstable numbers:
+    report their counts alongside, never the rates alone."""
+    groups: dict[str, list[dict]] = {}
+    for row in per_sample:
+        groups.setdefault(source_group(row["source"]), []).append(row)
+        if row["source"] and row["source"] not in SYNTHETIC_SOURCES:
+            groups.setdefault(f"external:{row['source']}", []).append(row)
+
+    out = []
+    for name in sorted(groups):
+        rows = groups[name]
+        labels = [r["label"] for r in rows]
+        for config in CONFIGS:
+            out.append({"group": name, "samples": len(rows), "positives": sum(labels),
+                        "configuration": config,
+                        **metrics(labels, [r[config] for r in rows])})
+    return out
 
 
 def fmt(value) -> str:
@@ -206,6 +239,11 @@ def print_report(target: str, result: dict) -> None:
               f"c={t['second_only_right']:<3} p={t['p_value']:.4f}")
     print(f"\nStatic and ML disagree on {len(result['disagreements'])} sample(s); "
           f"see eval_disagreements_{target}.csv")
+    print("\nBy source (F1 / FPR):")
+    for g in sorted({r["group"] for r in result["by_source"]}):
+        rows = [r for r in result["by_source"] if r["group"] == g]
+        cells = "  ".join(f"{r['configuration']}={fmt(r['f1'])}/{fmt(r['fpr'])}" for r in rows)
+        print(f"  {g:22} n={rows[0]['samples']:<4} pos={rows[0]['positives']:<4} {cells}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -232,8 +270,11 @@ def main(argv: list[str] | None = None) -> int:
         write_csv(args.results / f"eval_mcnemar_{target}.csv", [
             {**row, "p_value": round(row["p_value"], 6)} for row in result["mcnemar"]])
         write_csv(args.results / f"eval_disagreements_{target}.csv", result["disagreements"],
-                  ["sample_id", "kind", "group_id", "label", "static", "ml",
+                  ["sample_id", "kind", "source", "group_id", "label", "static", "ml",
                    "ml_score", "hybrid_label"])
+        write_csv(args.results / f"eval_by_source_{target}.csv", [
+            {k: (round(v, 4) if isinstance(v, float) else ("" if v is None else v))
+             for k, v in row.items()} for row in result["by_source"]])
         print_report(target, result)
 
     return 0
