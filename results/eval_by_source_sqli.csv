@@ -1,0 +1,17 @@
+group,samples,positives,configuration,TP,FP,TN,FN,precision,recall,f1,fpr
+external,41,2,static,2,0,39,0,1.0,1.0,1.0,0.0
+external,41,2,ml,2,0,39,0,1.0,1.0,1.0,0.0
+external,41,2,hybrid_agreement,2,0,39,0,1.0,1.0,1.0,0.0
+external,41,2,hybrid_union,2,0,39,0,1.0,1.0,1.0,0.0
+external:creddata,33,0,static,0,0,33,0,,,,0.0
+external:creddata,33,0,ml,0,0,33,0,,,,0.0
+external:creddata,33,0,hybrid_agreement,0,0,33,0,,,,0.0
+external:creddata,33,0,hybrid_union,0,0,33,0,,,,0.0
+external:securityeval,8,2,static,2,0,6,0,1.0,1.0,1.0,0.0
+external:securityeval,8,2,ml,2,0,6,0,1.0,1.0,1.0,0.0
+external:securityeval,8,2,hybrid_agreement,2,0,6,0,1.0,1.0,1.0,0.0
+external:securityeval,8,2,hybrid_union,2,0,6,0,1.0,1.0,1.0,0.0
+synthetic,199,29,static,24,14,156,5,0.6316,0.8276,0.7164,0.0824
+synthetic,199,29,ml,23,8,162,6,0.7419,0.7931,0.7667,0.0471
+synthetic,199,29,hybrid_agreement,19,5,165,10,0.7917,0.6552,0.717,0.0294
+synthetic,199,29,hybrid_union,28,17,153,1,0.6222,0.9655,0.7568,0.1
