@@ -28,6 +28,10 @@ Run from the project root:
 """
 from __future__ import annotations
 
+import hashlib
+import json
+from datetime import datetime, timezone
+
 import argparse
 import math
 import platform
@@ -264,7 +268,37 @@ def train_shipped_model(X, y, groups, feature_names: list[str], target: str) -> 
             "numpy": np.__version__,
         },
         "seed": SEED,
+        "trained_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
+
+
+def sha256_of(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def model_manifest_entry(bundle: dict, path: Path) -> dict:
+    """Readable record of one model (Table 3.5), including its file hash."""
+    return {
+        "file": path.name,
+        "sha256": sha256_of(path),
+        "target": bundle["target"],
+        "model_type": bundle["model_name"],
+        "params": {k: v for k, v in bundle["params"].items()},
+        "threshold": bundle["threshold"],
+        "trained_at": bundle["trained_at"],
+        "versions": bundle["versions"],
+        "feature_names": bundle["feature_names"],
+        "seed": bundle["seed"],
+        "n_samples": bundle["n_samples"],
+    }
+
+
+def write_manifest(models_dir: Path, entries: dict[str, dict]) -> None:
+    """models/manifest.json; the CLI refuses a model whose hash does not match."""
+    path = models_dir / "manifest.json"
+    existing = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    existing.update(entries)
+    path.write_text(json.dumps(existing, indent=2, default=str), encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -277,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
 
     import joblib
 
+    manifest: dict[str, dict] = {}
     samples = load_metadata(args.metadata)
     print(f"{len(samples)} samples from {args.metadata}")
     X, feature_names = build_feature_table(samples)
@@ -308,7 +343,9 @@ def main(argv: list[str] | None = None) -> int:
         joblib.dump(bundle, args.models / f"{target}.joblib")
         print(f"  shipped model: {bundle['model_name']} T={bundle['threshold']:.3f} "
               f"-> {args.models / (target + '.joblib')}")
+        manifest[target] = model_manifest_entry(bundle, args.models / f"{target}.joblib")
 
+    write_manifest(args.models, manifest)
     return 0
 
 

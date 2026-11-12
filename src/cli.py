@@ -1,8 +1,8 @@
 """Part 11: command-line interface.
 
-    python src/cli.py [--mode {static,ml,hybrid}] [--output report.json]
-                      [--recursive] [--min-confidence {critical,high,medium}]
-                      path [path ...]
+    python src/cli.py [--mode {static,ml,hybrid}] [-o report.json]
+                      [-r] [--min-confidence {critical,high,medium}]
+                      [--max-kb N] [--models DIR] path [path ...]
 
 Exit codes (FR16): 0 no findings, 1 findings reported, 2 invalid usage,
 3 a required model file is missing or unreadable.
@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import hashlib
 import json
 import sys
 import time
@@ -28,8 +29,12 @@ from static_analyzer import analyze_source
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CLASS_NAMES = {"SQLI": "SQL injection", "HCC": "Hard-coded credential"}
 CONFIDENCE_ORDER = {"Critical": 0, "High": 1, "Medium": 2}
+# Which component(s) produced a finding, shown as "source" (chapter 3.6.3).
+SOURCE = {"Critical": "static+ml", "High": "static", "Medium": "ml",
+          "Rule": "static", "ML": "ml"}
 MIN_CONFIDENCE = {"critical": {"Critical"}, "high": {"Critical", "High"},
                   "medium": {"Critical", "High", "Medium"}}
+DEFAULT_MAX_KB = 1024  # files larger than this are skipped (--max-kb)
 ML_ONLY_REMEDIATION = {
     "SQLI": "Check whether user input reaches this unit's SQL text; use driver "
             "placeholders and pass values separately.",
@@ -51,11 +56,23 @@ def load_models(models_dir: Path) -> dict[str, dict]:
     except ImportError as exc:
         raise ModelError("joblib/scikit-learn are not installed; use --mode static") from exc
 
+    manifest_path = models_dir / "manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ModelError(f"cannot read {manifest_path} (run src/train.py first, "
+                         f"or use --mode static)") from exc
+
     bundles = {}
     for target in TARGETS:
         path = models_dir / f"{target}.joblib"
         if not path.is_file():
             raise ModelError(f"model not found: {path} (run src/train.py first, or use --mode static)")
+        # joblib files can run code when loaded: only load the exact files train.py wrote.
+        expected = manifest.get(target, {}).get("sha256")
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if expected != actual:
+            raise ModelError(f"{path} does not match the hash in {manifest_path}; refusing to load it")
         try:
             bundles[target] = joblib.load(path)
         except Exception as exc:  # corrupted file, version mismatch
@@ -105,7 +122,33 @@ def finding_record(finding, unit: str, confidence: str) -> dict:
     record["unit"] = unit
     record["confidence"] = confidence
     record["vulnerability"] = CLASS_NAMES[finding.vuln_class]
+    record["source"] = SOURCE[confidence]
     return record
+
+
+def collect_files(paths: list[str], recursive: bool, max_kb: int) -> list[Path]:
+    """Python files to scan, after the safety checks of chapter 3.8.1.
+
+    * A file reached through a folder must stay inside that folder once
+      symbolic links are resolved, so a link cannot pull in files from
+      elsewhere on the machine.
+    * Files larger than max_kb are skipped, which bounds parser memory.
+    """
+    files: list[Path] = []
+    for given in paths:
+        root = Path(given).resolve()
+        for path in find_python_files(given, recursive=recursive):
+            resolved = path.resolve()
+            if root.is_dir() and not resolved.is_relative_to(root):
+                print(f"Warning: {path}: skipped (link points outside {given})", file=sys.stderr)
+                continue
+            size_kb = resolved.stat().st_size / 1024
+            if size_kb > max_kb:
+                print(f"Warning: {path}: skipped ({size_kb:.0f} KB is over the "
+                      f"{max_kb} KB limit; see --max-kb)", file=sys.stderr)
+                continue
+            files.append(path)
+    return files
 
 
 def scan_file(path: Path, mode: str, bundles: dict | None, combine) -> list[dict]:
@@ -159,6 +202,7 @@ def scan_file(path: Path, mode: str, bundles: dict | None, combine) -> list[dict
                                "vulnerability class, but no rule matched. Review it manually.",
                     "remediation": ML_ONLY_REMEDIATION[vuln_class],
                     "confidence": label,
+                    "source": SOURCE[label],
                 })
     return records
 
@@ -173,6 +217,7 @@ def print_records(records: list[dict], mode: str) -> None:
         rule = f" [{r['rule_id']}]" if r.get("rule_id") else ""
         print(f"{r['file']}:{r['line']}  {r['confidence'].upper()}  {r['vulnerability']}{rule}")
         print(f"    unit:   {r['unit']}")
+        print(f"    source: {r['source']}")
         if r["snippet"]:
             print(f"    code:   {r['snippet'].strip().splitlines()[0]}")
         print(f"    why:    {r['message']}")
@@ -182,6 +227,17 @@ def print_records(records: list[dict], mode: str) -> None:
         counts[r["confidence"]] = counts.get(r["confidence"], 0) + 1
     summary = ", ".join(f"{n} {label}" for label, n in counts.items())
     print(f"\n{len(records)} finding(s) ({mode} mode): {summary}")
+
+
+def scan_summary(records: list[dict], files_scanned: int, mode: str, seconds: float) -> dict:
+    by_confidence: dict[str, int] = {}
+    by_type: dict[str, int] = {}
+    for r in records:
+        by_confidence[r["confidence"].lower()] = by_confidence.get(r["confidence"].lower(), 0) + 1
+        by_type[r["vulnerability"]] = by_type.get(r["vulnerability"], 0) + 1
+    return {"mode": mode, "files_scanned": files_scanned, "total_findings": len(records),
+            "findings_by_confidence": by_confidence, "findings_by_type": by_type,
+            "seconds": round(seconds, 3)}
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -194,17 +250,23 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("paths", nargs="+", metavar="path", help="Python file(s) or folder(s)")
     parser.add_argument("--mode", choices=("static", "ml", "hybrid"), default="hybrid",
                         help="detection configuration (default: hybrid)")
-    parser.add_argument("--output", type=Path, help="also write findings to this JSON file")
-    parser.add_argument("--recursive", action="store_true", help="scan subfolders too")
+    parser.add_argument("-o", "--output", type=Path, help="also write findings to this JSON file")
+    parser.add_argument("-r", "--recursive", action="store_true", help="scan subfolders too")
     parser.add_argument("--min-confidence", choices=("critical", "high", "medium"),
                         default="medium", help="hybrid mode: lowest label to report (default: medium)")
+    parser.add_argument("--max-kb", type=int, default=DEFAULT_MAX_KB,
+                        help=f"skip files larger than this many KB (default: {DEFAULT_MAX_KB})")
     parser.add_argument("--models", type=Path, default=PROJECT_ROOT / "models",
                         help="folder with sqli.joblib and hcc.joblib")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_arg_parser().parse_args(argv)
+    arg_parser = build_arg_parser()
+    args = arg_parser.parse_args(argv)
+    missing = [p for p in args.paths if not Path(p).exists()]
+    if missing:
+        arg_parser.error(f"path does not exist: {', '.join(missing)}")  # exits with code 2
     started = time.perf_counter()
 
     combine = None
@@ -218,9 +280,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: {exc}", file=sys.stderr)
         return 3
 
-    files: list[Path] = []
-    for path in args.paths:
-        files.extend(find_python_files(path, recursive=args.recursive))
+    files = collect_files(args.paths, args.recursive, args.max_kb)
 
     records: list[dict] = []
     try:
@@ -244,9 +304,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps({
-            "mode": args.mode,
-            "files_scanned": len(files),
-            "seconds": round(elapsed, 3),
+            "scan_summary": scan_summary(records, len(files), args.mode, elapsed),
             "findings": records,
         }, indent=2), encoding="utf-8")
         print(f"JSON report written to {args.output}")
